@@ -1,0 +1,5 @@
+{
+    "folder_id": "ffffffff",
+    "source_image_family": "ubuntu-1804-lts",
+    "service_key_path": "packer/mock.json",
+}

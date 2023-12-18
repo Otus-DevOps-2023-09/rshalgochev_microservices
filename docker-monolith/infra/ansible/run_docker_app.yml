@@ -1,0 +1,17 @@
+---
+- name: Install Docker
+  hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+    - name: Wait server
+      wait_for_connection:
+    - name: Gather facts for first time
+      setup:
+    - name: container
+      docker_container:
+        name: reddit
+        image: rshalgochev/otus-reddit:1.0
+        state: started
+        ports:
+          - "9292:9292"

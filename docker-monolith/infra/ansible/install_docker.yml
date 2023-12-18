@@ -1,0 +1,41 @@
+---
+- name: Install Docker
+  hosts: all
+  become: true
+  tasks:
+    - name: Ensure dependencies installed
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - apt-transport-https
+        - ca-certificates
+        - python-pip
+
+    - name: Install python libs
+      pip:
+        name: docker-py
+        executable: pip
+
+    - name: Add an Apt signing key, uses whichever key is at the URL
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add specified repository into sources list
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+        update_cache: yes
+
+    - name: Ensure docker installed
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Start docker daemon
+      service:
+        name: docker
+        state: started
+        enabled: yes
