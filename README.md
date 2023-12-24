@@ -33,3 +33,13 @@ docker run -d --network reddit --name app_ui -p 9292:9292 --env POST_SERVICE_HOS
 ```shell
 docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
 ```
+# Docker-4
+Написал docker-compose.yml
+Чтобы чтобы развернуть прилоение выполнить команду
+```shell
+docker-compose up -d
+```
+Если Необходимо переопределить стандартный префикс проекта, то запустить необходимо командой
+```shell
+docker-compose -p "PROJECT_NAME" up -d
+```
