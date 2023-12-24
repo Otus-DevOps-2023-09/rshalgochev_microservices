@@ -10,6 +10,7 @@ services:
     image: ${DOCKER_REGISTRY}/ui:${UI_VERSION}
     ports:
       - ${PUBLIC_PORT}:9292/tcp
+    command: "puma -w 2 --debug"
     networks:
       - frontend
   post:
@@ -19,6 +20,7 @@ services:
       - frontend
   comment:
     image: ${DOCKER_REGISTRY}/comment:${COMMENT_VERSION}
+    command: "puma -w 2 --debug"
     networks:
       - backend
       - frontend
