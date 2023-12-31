@@ -1,0 +1,10 @@
+---
+- name: Start gitlab-runner
+  docker_container:
+    name: gitlab-runner
+    image: gitlab/gitlab-runner:latest
+    restart: yes
+    state: started
+    volumes:
+      - /srv/gitlab-runner/config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
