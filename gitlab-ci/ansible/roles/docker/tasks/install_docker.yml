@@ -1,0 +1,19 @@
+---
+- name: Ensure docker installed
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop: "{{ new_versions }}"
+
+- name: Add remote  user to docker group
+  user:
+    name: "{{ ansible_env['USER'] }}"
+    groups: "docker"
+    append: yes
+
+- name: Ensure required python libraries installed
+  pip:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ python_libs }}"

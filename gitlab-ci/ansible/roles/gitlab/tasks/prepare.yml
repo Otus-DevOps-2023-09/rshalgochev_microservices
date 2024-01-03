@@ -1,0 +1,14 @@
+---
+- name: Ensure gitlab_home created
+  file:
+    state: directory
+    path: "{{ gitlab_home }}"
+
+- name: Create gitlab data dirs
+  file:
+    state: directory
+    path: "{{ gitlab_home }}/{{ item }}"
+  with_items:
+    - config
+    - logs
+    - data

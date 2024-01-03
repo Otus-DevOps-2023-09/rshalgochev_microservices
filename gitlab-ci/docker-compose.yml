@@ -1,0 +1,33 @@
+version: "3.3"
+services:
+  gitlab-server:
+    image: 'gitlab/gitlab-ee:latest'
+    restart: always
+    hostname: 'gitlab.example.com'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://${GITLAB_IP}'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '2222:22'
+    volumes:
+      - '/srv/gitlab/config:/etc/gitlab'
+      - '/srv/gitlab/logs:/var/log/gitlab'
+      - '/srv/gitlab/data:/var/opt/gitlab'
+
+  gitlab-runner:
+    image: "gitlab/gitlab-runner:latest"
+    volumes:
+      - "/srv/gitlab-runner/config:/etc/gitlab-runner"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command: 'register \
+              --non-interactive \
+              --executor "docker" \
+              --docker-image alpine:latest \
+              --url "${GITLAB_URL}" \
+              --registration-token "${GITLAB_TOKEN}" \
+              --description "docker-runner" \
+              --run-untagged="true" \
+              --locked="false" \
+              --access-level="not_protected"'

@@ -1,0 +1,28 @@
+---
+- name: Ensure old docker versions removed
+  apt:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ old_versions }}"
+
+- name: Ensure dependency packages installed
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop: "{{ prepare_install }}"
+
+- name: Add docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    keyring: "/usr/share/keyrings/docker-archive-keyring.gpg"
+    state: present
+
+- name: Add APT repository for docker
+  apt_repository:
+    repo: "{{ docker_repo }}"
+
+- name: Ensure pip installed
+  apt:
+    name: "{{ item }}"
+  loop: "{{ python_modules }}"

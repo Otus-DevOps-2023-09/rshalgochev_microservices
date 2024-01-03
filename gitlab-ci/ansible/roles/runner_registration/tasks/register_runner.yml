@@ -1,0 +1,19 @@
+---
+- name: Register gitlab-runner
+  docker_container:
+    name: registration
+    image: gitlab/gitlab-runner:latest
+    restart: no
+    auto_remove: yes
+    volumes:
+      - /srv/gitlab-runner/config:/etc/gitlab-runner
+    command: 'register \
+              --non-interactive \
+              --executor "docker" \
+              --docker-image alpine:latest \
+              --url "{{ gitlab_url }}" \
+              --registration-token "{{ gitlab_token }}" \
+              --description "docker-runner" \
+              --run-untagged="true" \
+              --locked="false" \
+              --access-level="not_protected"'

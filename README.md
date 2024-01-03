@@ -43,3 +43,18 @@ docker-compose up -d
 ```shell
 docker-compose -p "PROJECT_NAME" up -d
 ```
+# Gitlab
+Автоматизировал запуск сервера gitlab.
+Чтобы запустить сервер необходимо в директории gitlab-ci/terraform создать файл terrafotm.tfvars из файла
+terrafotm.tfvars.exmple. Затем выполнить команду:
+```shell
+terraform apply
+```
+Дождаться создания ВМ в облаке и запуска сервера gitlab-ci. Затем подключиться по ssh и провести первоначальную настройку
+самого gitlab, а имено - настроить пароль для пользователя root.
+Далее можно выполнить нужные настройки в web-части сервиса.
+После создания проекта необходимо перейти в настройки CI/CD, узнать там токен для регитсрации gitlab-runner и запустить
+в директории gitlab-ci/ansible плейбук, который зарегистрирует раннер командой:
+```shell
+ansible-playbook register_runner.yml -e gitlab_token=your_token -e gitlab_url=your_gitlab_url
+```

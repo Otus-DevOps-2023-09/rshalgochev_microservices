@@ -1,0 +1,18 @@
+---
+- name: Run gitlab-server
+  docker_container:
+    name: gitlab-server
+    image: gitlab/gitlab-ee:latest
+    restart: yes
+    state: started
+    ports:
+      - "80:80"
+      - "443:443"
+      - "2222:22"
+    env:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url '{{ gitlab_url }}'
+    volumes:
+      - '/opt/gitlab/config:/etc/gitlab'
+      - '/opt/gitlab/logs:/var/log/gitlab'
+      - '/opt/gitlab/data:/var/opt/gitlab'

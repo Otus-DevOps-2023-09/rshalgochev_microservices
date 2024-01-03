@@ -1,0 +1,14 @@
+---
+- name: Run gitlab-server
+  hosts: all
+  gather_facts: no
+  become: true
+  become_method: sudo
+  pre_tasks:
+    - name: Wait server
+      wait_for_connection:
+    - name: Gather facts for first time
+      setup:
+  roles:
+    - docker
+    - gitlab
