@@ -5,13 +5,13 @@
     image: gitlab/gitlab-ee:latest
     restart: yes
     state: started
-    env:
-      GITLAB_OMNIBUS_CONFIG: |
-      external_url '{{ gitlab_url }}'
     ports:
       - "80:80"
       - "443:443"
       - "2222:22"
+    env:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url '{{ gitlab_url }}'
     volumes:
       - '/opt/gitlab/config:/etc/gitlab'
       - '/opt/gitlab/logs:/var/log/gitlab'

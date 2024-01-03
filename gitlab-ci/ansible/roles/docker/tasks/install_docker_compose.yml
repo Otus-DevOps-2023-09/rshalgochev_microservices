@@ -11,3 +11,4 @@
     src: /usr/bin/docker-compose
     state: link
     force: yes
+    follow: false
