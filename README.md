@@ -58,3 +58,18 @@ terraform apply
 ```shell
 ansible-playbook register_runner.yml -e gitlab_token=your_token -e gitlab_url=your_gitlab_url
 ```
+# Monitoring
+Добавил конфигурацию для запуска мониторинга.
+Для запуска выполнить следующий порядок действий:
+1. Выполнить сборку образов сервисов и компонентов мониторинга, для этого можно использовать готовый Makefile. Команда для сборки:
+```shell
+    export USER_NAME=your_docker_user
+    make build
+    make push
+```
+2. Перейти в директорию docker и заполнить .env файл, образец заполнения в .env.example
+3. Запустить порилождение и систему мониторинга командой
+```shell
+    docker-compose up -d
+```
+4. Для проверки работы мониторинга перейти в браузере по адресу http://ip_сервера:9090
