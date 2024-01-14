@@ -68,6 +68,7 @@ services:
 
 volumes:
   post_db:
+  prom_data:
 
 networks:
   backend:
