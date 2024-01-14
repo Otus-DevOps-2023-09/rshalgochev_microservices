@@ -1,0 +1,2 @@
+---
+- include_tasks: register_runner.yml
