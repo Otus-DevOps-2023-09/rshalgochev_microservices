@@ -73,3 +73,26 @@ ansible-playbook register_runner.yml -e gitlab_token=your_token -e gitlab_url=yo
     docker-compose up -d
 ```
 4. Для проверки работы мониторинга перейти в браузере по адресу http://ip_сервера:9090
+
+# Logging
+Добавил конфигурацию системы сбора логов и трейсов.
+Для запуска выполнить следующие действия:
+1. Из файлв .env.example создать файл .env
+2. Собрать образа серсивов
+```shell
+    export USER_NAME="your_docker_login"
+    cd ./src/ui && bash docker_build.sh && docker push $USER_NAME/ui:logging
+    cd ../post-py && bash docker_build.sh && docker push $USER_NAME/post:logging
+    cd ../comment && bash docker_build.sh && docker push $USER_NAME/comment:logging
+    cd ../../logging/fluentd && docker build -t $USER_NAME/fluentd:logging . && docker push $USER_NAME/fluentd:logging
+```
+3. Перейти в директорию docker и запустить систему сбора логов командой
+```shell
+   docker-compose -f docker-compose-logging.yml up -d
+```
+4. Также находясь в директории docker запустить сервисы и систему мониторига командой
+```shell
+    docker-compose -f docker-compose.yml up -d
+```
+5. Логи можно увидеть в Kibana, если перейти по адресу http://ip_address:5601
+6. Трейсы дсотупны по адресу http://ip_address:9411

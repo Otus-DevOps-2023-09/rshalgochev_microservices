@@ -1,9 +1,9 @@
 version: '3.3'
 services:
-  post_db:
+  mongo_db:
     image: mongo:3.2
     volumes:
-      - post_db:/data/db
+      - mongo_db:/data/db
     networks:
       - backend
   ui:
@@ -13,17 +13,43 @@ services:
     command: "puma -w 2 --debug"
     networks:
       - frontend
+    environment:
+      - POST_SERVICE_HOST=post
+      - POST_SERVICE_PORT=5000
+      - COMMENT_SERVICE_HOST=comment
+      - COMMENT_SERVICE_PORT=9292
+      - TRACE_ENABLED=${TRACE_ENABLED}
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: service.ui
   post:
     image: ${DOCKER_REGISTRY}/post:${POST_VERSION}
     networks:
       - backend
       - frontend
+    environment:
+      - POST_DATABASE_HOST=mongo_db
+      - TRACE_ENABLED=${TRACE_ENABLED}
+    depends_on:
+      - mongo_db
+    ports:
+      - "5000:5000"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: service.post
   comment:
     image: ${DOCKER_REGISTRY}/comment:${COMMENT_VERSION}
     command: "puma -w 2 --debug"
     networks:
       - backend
       - frontend
+    environment:
+      - COMMENT_DATABASE_HOST=mongo_db
+      - TRACE_ENABLED=${TRACE_ENABLED}
   prometheus:
     image: ${DOCKER_REGISTRY}/prometheus:${PROMETHEUS_VERSION}
     ports:
@@ -67,7 +93,7 @@ services:
       - backend
 
 volumes:
-  post_db:
+  mongo_db:
   prom_data:
 
 networks:
