@@ -96,3 +96,14 @@ ansible-playbook register_runner.yml -e gitlab_token=your_token -e gitlab_url=yo
 ```
 5. Логи можно увидеть в Kibana, если перейти по адресу http://ip_address:5601
 6. Трейсы дсотупны по адресу http://ip_address:9411
+# Kubernetes-1
+1. Развернул кластер kubernetes
+2. Подготовил манифесты для делпоя приложений
+3. Выполнил деплой командой
+```shell
+    kubectl apply -f mongo-deployment.yml
+    kubectl apply -f ui-deployment.yml
+    kubectl apply -f post-deployment.yml
+    kubectl apply -f comment-deployment.yml
+```
+4. Написал конфиг terraform и ansible для автоматизации развертывания кластера

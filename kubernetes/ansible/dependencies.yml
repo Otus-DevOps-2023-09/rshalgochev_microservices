@@ -1,0 +1,98 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: install container runtime dependencies
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      with_items:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg2
+        - software-properties-common
+
+    - name: Set some facts
+      set_fact:
+        crio_version: "1.23"
+        system_version: "xUbuntu_20.04"
+
+    - name: add CRI-O gpg key
+      apt_key:
+        url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{ crio_version }}/{{ system_version}}/Release.key"
+        state: present
+
+    - name: add CRI-O-RUNC gpg key
+      apt_key:
+        url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/{{ system_version }}/Release.key"
+        state: present
+
+    - name: add CRI-O-RUNC repository
+      apt_repository:
+        repo: "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/{{ system_version }}/ /"
+        state: present
+
+    - name: add CRI-O repository
+      apt_repository:
+        repo: "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{ crio_version }}/{{ system_version}}/ /"
+        state: present
+
+    - name: Ensure CRI-O container runtime installed
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      with_items:
+        - cri-o
+        - cri-o-runc
+
+    - name: Copy CRI-O conf file
+      copy:
+        src: "files/cgroup-manager.conf"
+        dest: "/etc/crio/crio.conf.d/cgroup-manager.conf"
+
+    - name: restart crio
+      service:
+        name: crio
+        state: reloaded
+
+    - name: add Kubernetes apt-key
+      apt_key:
+        url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+        state: present
+
+    - name: add Kubernetes' APT repository
+      apt_repository:
+        repo: "deb https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"
+        state: present
+
+    - name: install kubelet
+      apt:
+        name: kubelet
+        state: present
+        update_cache: true
+
+    - name: install kubeadm
+      apt:
+        name: kubeadm
+        state: present
+
+    - name: Disable SWAP (1/2)
+      shell: |
+        swapoff -a
+    - name: Remove SWAP in fstab (2/2)
+      replace:
+        path: /etc/fstab
+        regexp: "^[^#](swap)"
+        replace: '# \1'
+
+- hosts: master
+  become: yes
+  tasks:
+    - name: install kubectl
+      apt:
+        name: kubectl
+        state: present
+        force: yes
