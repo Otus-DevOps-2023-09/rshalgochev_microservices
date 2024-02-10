@@ -1,0 +1,13 @@
+---
+- name: Install
+  hosts: all
+  gather_facts: no
+  pre_tasks:
+    - name: Wait server
+      wait_for_connection:
+    - name: Gather facts for first time
+      setup:
+
+- import_playbook: dependencies.yml
+- import_playbook: master.yml
+- import_playbook: workers.yml
