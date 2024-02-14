@@ -107,3 +107,13 @@ ansible-playbook register_runner.yml -e gitlab_token=your_token -e gitlab_url=yo
     kubectl apply -f comment-deployment.yml
 ```
 4. Написал конфиг terraform и ansible для автоматизации развертывания кластера
+# Kubernetes-2
+1. Развернул manageg-кластер kubernetes в yandex-cloud
+2. Подготовил автоматизацию через сценарий terraform для запуска кластера
+3. Чтобы запустить выполнить команду:
+```shell
+    cd kubernetes/managed-k8s-terraform && \
+    terraform apply
+```
+4. Подготовил конфиги сервисов для настройки взаимодействия компонентов прилоения между собой в кластере
+5. Выполнил установку приложений через kubectl
