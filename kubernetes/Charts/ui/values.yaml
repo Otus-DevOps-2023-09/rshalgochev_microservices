@@ -1,0 +1,16 @@
+---
+service:
+  internalPort: 9292
+  externalPort: 9292
+
+image:
+  repository: rshalgochev/ui
+  tag: "2.0"
+
+ingress:
+  class: "nginx"
+
+postHost:
+postPort:
+commentHost:
+commentPort:
