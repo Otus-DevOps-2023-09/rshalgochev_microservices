@@ -1,0 +1,20 @@
+comment:
+  image:
+    repository: rshalgochev/comment
+    tag: 2.0
+  service:
+    externalPort: 9292
+
+post:
+  image:
+    repository: rshalgochev/post
+    tag: 1.0
+  service:
+    externalPort: 5000
+
+ui:
+  image:
+    repository: rshalgochev/ui
+    tag: 2.0
+  service:
+    externalPort: 9292

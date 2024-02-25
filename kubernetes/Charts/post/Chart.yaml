@@ -1,0 +1,7 @@
+name: post
+version: 1.0.0
+description: OTUS reddit app post-service
+maintainer:
+  - name: Roman Shalgochev
+    email: rshalgochev@gmail.com
+appVersion: 1.0

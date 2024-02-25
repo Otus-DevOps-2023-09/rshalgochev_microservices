@@ -1,0 +1,7 @@
+name: comment
+version: 1.0.0
+description: OTUS reddit app comment-service
+maintainer:
+  - name: Roman Shalgochev
+    email: rshalgochev@gmail.com
+appVersion: 2.0
